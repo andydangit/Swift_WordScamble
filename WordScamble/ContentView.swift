@@ -8,14 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    let people = ["Andy", "Dang", "It"]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        
+        List{
+            Text("Static Row")
+            
+//            Dynamic row
+            ForEach(people, id: \.self) {
+                Text($0)
+            }
+
+            Text("Static Row")
+    }
+      
+        
+        
     }
 }
 
