@@ -16,17 +16,24 @@ struct ContentView: View {
         List{
             Text("Static Row")
             
-//            Dynamic row
+            //            Dynamic row
             ForEach(people, id: \.self) {
                 Text($0)
             }
-
+            
             Text("Static Row")
+        }
     }
-      
-        
-        
+    
+    
+    func testBundle() {
+        if let fileURL = Bundle.main.url(forResource: "somefile", withExtension: "txt") {
+            if let fileContents = try? String(contentsOf: fileURL, encoding: .utf8) {
+                // we loaded the file into a string!
+            }
+        }
     }
+    
 }
 
 #Preview {
