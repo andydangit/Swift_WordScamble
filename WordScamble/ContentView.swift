@@ -17,10 +17,17 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
    //MARK: - UI VIEW
     
     var body: some View {
         NavigationStack {
+            VStack {
+                Text("Score: \(score)")
+                    .font(.headline)
+                    .padding()
+            }
+            
             List {
                 Section {
                     TextField("Enter your word", text: $newWord)
@@ -44,6 +51,16 @@ struct ContentView: View {
             } message: {
                 Text(errorMessage)
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Restart") {
+                        startGame()
+                        usedWords.removeAll()
+                        newWord = ""
+                        score = 0
+                    }
+                }
+            }
         }
         
     }
@@ -53,7 +70,16 @@ struct ContentView: View {
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard answer.count > 0 else { return}
+        guard answer.count >= 4 else {
+            wordError(title: "Word to short", message: "You can't start word less than 3 characters")
+            return
+        }
+        
+        guard answer != rootWord.lowercased() else {
+            wordError(title: "Word is not allowed", message: "You can't use start word as a word")
+            return
+        }
+               
         
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original!")
@@ -73,6 +99,8 @@ struct ContentView: View {
         withAnimation{
             usedWords.insert(answer, at: 0)
         }
+        score += answer.count
+        
         newWord = ""
     }
 
@@ -117,6 +145,7 @@ struct ContentView: View {
         errorMessage = message
         showingError = true
     }
+    
     
     
     // MARK: - END OF BODY
